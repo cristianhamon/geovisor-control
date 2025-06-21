@@ -1,6 +1,6 @@
-
 const map = L.map('map').setView([3.45, -76.53], 15);
 
+// Agregar Google Hybrid como mapa base
 const googleHybrid = L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
   subdomains:['mt0','mt1','mt2','mt3'],
   maxZoom: 20,
@@ -8,13 +8,17 @@ const googleHybrid = L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z
   opacity: 0.5
 }).addTo(map);
 
-document.getElementById("opacitySlider").addEventListener("input", function() {
-  const opacity = parseFloat(this.value);
-  googleHybrid.setOpacity(opacity);
+// Agregar OSM como mapa base
+const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; OpenStreetMap contributors',
+  opacity: 0.5 
 });
 
+// Agregar control de capas
 const baseMaps = {
-  "Google Hybrid": googleHybrid
+  "Google Hybrid": googleHybrid,
+  "OpenStreetMap": osm
 };
 
 const controlCapas = L.control.layers(baseMaps, {}, { collapsed: false }).addTo(map);
@@ -58,8 +62,18 @@ fetch("Seguimiento_AFNGE.geojson")
         layer.bindPopup(content);
       }
     }).addTo(map);
-    controlCapas.addOverlay(afnge, "Seguimiento AFNGE");
+    controlCapas.addOverlay(afnge, "Seguimiento AFNGE (verde/rojo)");
   });
+
+// Control de transparencia para mapas base
+const opacitySlider = document.getElementById('opacitySlider');
+if (opacitySlider) {
+  opacitySlider.addEventListener('input', function() {
+    const value = parseFloat(this.value);
+    googleHybrid.setOpacity(value);
+    osm.setOpacity(value);
+  });
+}
 
 // Geolocalización
 L.Control.Locate = L.Control.extend({
