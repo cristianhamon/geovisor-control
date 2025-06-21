@@ -19,7 +19,7 @@ const baseMaps = {
 
 const controlCapas = L.control.layers(baseMaps, {}, { collapsed: false }).addTo(map);
 
-// Capa Claudia (azul)
+// Visitas Claudia (azul)
 fetch("Visitas_Claudia_18jun.geojson")
   .then(res => res.json())
   .then(data => {
@@ -31,16 +31,14 @@ fetch("Visitas_Claudia_18jun.geojson")
       },
       onEachFeature: (feature, layer) => {
         const props = feature.properties;
-        const content = Object.keys(props)
-          .map(k => `<b>${k}</b>: ${props[k]}`)
-          .join("<br>");
+        const content = Object.keys(props).map(k => `<b>${k}</b>: ${props[k]}`).join("<br>");
         layer.bindPopup(content);
       }
     }).addTo(map);
     controlCapas.addOverlay(claudia, "Visitas Claudia (azul)");
   });
 
-// Capa AFNGE (rojo/verde)
+// Seguimiento AFNGE (verde/rojo)
 fetch("Seguimiento_AFNGE.geojson")
   .then(res => res.json())
   .then(data => {
@@ -56,16 +54,30 @@ fetch("Seguimiento_AFNGE.geojson")
       },
       onEachFeature: (feature, layer) => {
         const props = feature.properties;
-        const content = Object.keys(props)
-          .map(k => `<b>${k}</b>: ${props[k]}`)
-          .join("<br>");
+        const content = Object.keys(props).map(k => `<b>${k}</b>: ${props[k]}`).join("<br>");
         layer.bindPopup(content);
       }
     }).addTo(map);
-    controlCapas.addOverlay(afnge, "Seguimiento AFNGE (verde/rojo)");
+    controlCapas.addOverlay(afnge, "Seguimiento AFNGE");
   });
 
 // Geolocalización
+L.Control.Locate = L.Control.extend({
+  onAdd: function(map) {
+    const btn = L.DomUtil.create('div', 'leaflet-control-locate');
+    L.DomEvent.on(btn, 'click', function () {
+      localizarUsuario();
+    });
+    return btn;
+  },
+  onRemove: function(map) {}
+});
+
+L.control.locate = function(opts) {
+  return new L.Control.Locate(opts);
+}
+L.control.locate({ position: 'topleft' }).addTo(map);
+
 let geolocateCircle = null;
 
 function localizarUsuario() {

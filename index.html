@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Visor de Predios - Geolocalización Final</title>
+  <title>Visor de Predios</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -16,28 +16,37 @@
 
     #map { height: 100%; }
 
-    .legend, .opacity-control, .geolocate-button {
+    .legend {
       position: absolute;
       left: 10px;
+      bottom: 10px;
       background: white;
       padding: 8px 12px;
       border-radius: 5px;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 18px;
       box-shadow: 0 0 15px rgba(0,0,0,0.2);
       z-index: 1000;
-      font-family: Arial, sans-serif;
     }
 
-    .legend { bottom: 170px; }
-    .opacity-control { bottom: 100px; }
-    .geolocate-button {
-      bottom: 40px;
-      background: #f0f0f0;
-      cursor: pointer;
-      font-weight: bold;
-      text-align: center;
-      border: 1px solid #ccc;
+    .legend h2,
+    .legend h3,
+    .legend h4 {
+      margin-top: 4px;
+      margin-bottom: 10px;
+      font-weight: bold;}
+
+    .opacity-control {
+      position: absolute;
+      right: 10px;
+      bottom: 20px;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 5px;
+      font-size: 16px;
+      line-height: 18px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      z-index: 1000;
     }
 
     .legend i {
@@ -47,14 +56,30 @@
       margin-right: 8px;
       opacity: 0.7;
     }
+
+    .leaflet-control-locate {
+      background-color: white;
+      background-size: 20px 20px;
+      background-position: center;
+      background-repeat: no-repeat;
+      width: 34px;
+      height: 34px;
+      cursor: pointer;
+      border-radius: 4px;
+      box-shadow: 0 0 3px rgba(0,0,0,0.4);
+      background-image: url('https://cdn-icons-png.flaticon.com/512/684/684908.png');
+    }
   </style>
 </head>
 <body>
   <div id="map"></div>
 
   <div class="legend">
+    <h2>Leyenda</h2>
+    <h4>AFNGE</h4>
     <div><i style="background: green"></i> Predio visitado</div>
     <div><i style="background: red"></i> Predio no visitado</div>
+    <h4>Visita adicionales</h4>
     <div><i style="background: blue"></i> Visitas Claudia</div>
   </div>
 
@@ -62,8 +87,6 @@
     <label for="opacitySlider"><b>Transparencia fondo</b></label><br>
     <input type="range" id="opacitySlider" min="0" max="1" step="0.05" value="0.5">
   </div>
-
-  <div class="geolocate-button" onclick="localizarUsuario()">📍 Mi ubicación</div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="main.js"></script>
